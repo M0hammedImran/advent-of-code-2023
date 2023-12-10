@@ -46,8 +46,6 @@ fn part_two(input_string: String) -> u32 {
     return input_string
         .split('\n')
         .map(|line| {
-            println!("line: {:?}", line);
-
             let mut line = line.to_string();
             let mut line_indexes = Vec::new();
 
@@ -61,7 +59,10 @@ fn part_two(input_string: String) -> u32 {
             line_indexes.sort();
             line_indexes.clone().into_iter().for_each(|line_index| {
                 let v_digit = line_index.split('_').collect::<Vec<_>>()[1];
-                line = line.replace(v_digit, digits.get(v_digit).unwrap().to_string().as_str());
+                line = line.replace(
+                    v_digit,
+                    &(digits.get(v_digit).unwrap().to_string() + v_digit),
+                );
             });
 
             return line
@@ -70,43 +71,8 @@ fn part_two(input_string: String) -> u32 {
                 .collect::<Vec<_>>();
         })
         .map(|numbers| {
-            println!("numbers: {:?}", numbers);
             let sum = (10 * numbers.first().unwrap()) + numbers.last().unwrap();
             sum
         })
         .sum();
-}
-
-fn parse_input(input: &str, replace: bool) -> u32 {
-    input
-        .lines()
-        .filter(|line| !line.is_empty())
-        .map(|line| {
-            let mut line = line.to_string();
-            println!("line: {:?}", line);
-            if replace {
-                line = line
-                    .to_string()
-                    .replace("one", "one1one")
-                    .replace("two", "two2two")
-                    .replace("three", "three3three")
-                    .replace("four", "four4four")
-                    .replace("five", "five5five")
-                    .replace("six", "six6six")
-                    .replace("seven", "seven7seven")
-                    .replace("eight", "eight8eight")
-                    .replace("nine", "nine9nine");
-            }
-            line
-        })
-        .map(|line| {
-            line.chars()
-                .filter_map(|c| c.to_digit(10))
-                .collect::<Vec<u32>>()
-        })
-        .map(|vec| {
-            println!("vec: {:?}", vec);
-            10 * vec.first().unwrap() + vec.last().unwrap()
-        })
-        .sum()
 }
